@@ -277,36 +277,65 @@ public class Map {
         // TODO make loop
         int x = node.getxPosition();
         int y = node.getyPosition();
-        List<Node> adj = new LinkedList<Node>();
+        List<Node> adj = new LinkedList<>();
 
         Node temp;
-        if (x > 0) {
-            temp = this.getNode((x - 1), y);
+        if (x + 1 <= width & y - 2 >= 0) {
+            temp = this.getNode((x + 1), (y - 2));
             if (temp.isWalkable() && !closedList.contains(temp)) {
                 adj.add(temp);
             }
         }
 
-        if (x < width) {
-            temp = this.getNode((x + 1), y);
+        if (x + 2 <= width & y - 1 >= 0) {
+            temp = this.getNode((x + 2), (y - 1));
             if (temp.isWalkable() && !closedList.contains(temp)) {
                 adj.add(temp);
             }
         }
 
-        if (y > 0) {
-            temp = this.getNode(x, (y - 1));
+        if (x + 1 <= width & y + 2 <= higth) {
+            temp = this.getNode((x + 1), (y + 2));
             if (temp.isWalkable() && !closedList.contains(temp)) {
                 adj.add(temp);
             }
         }
 
-        if (y < higth) {
-            temp = this.getNode(x, (y + 1));
+        if (x + 2 <= width & y + 1 <= higth) {
+            temp = this.getNode((x + 2), (y + 1));
             if (temp.isWalkable() && !closedList.contains(temp)) {
                 adj.add(temp);
             }
         }
+
+        if (x - 1 >= 0 & y - 2 >= 0) {
+            temp = this.getNode((x - 1), (y - 2));
+            if (temp.isWalkable() && !closedList.contains(temp)) {
+                adj.add(temp);
+            }
+        }
+
+        if (x - 2 >= 0 & y - 1 >= 0) {
+            temp = this.getNode((x - 2), (y - 1));
+            if (temp.isWalkable() && !closedList.contains(temp)) {
+                adj.add(temp);
+            }
+        }
+
+        if (x - 1 >= 0 & y + 2 <= higth) {
+            temp = this.getNode((x - 1), (y + 2));
+            if (temp.isWalkable() && !closedList.contains(temp)) {
+                adj.add(temp);
+            }
+        }
+
+        if (x - 2 >= 0 & y + 1 <= higth) {
+            temp = this.getNode((x - 2), (y + 1));
+            if (temp.isWalkable() && !closedList.contains(temp)) {
+                adj.add(temp);
+            }
+        }
+
         return adj;
     }
 
