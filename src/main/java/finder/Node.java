@@ -1,65 +1,43 @@
 package finder;
 
-public class Node {
+public class Node implements Comparable<Node>{
 
-    private final static int BASICMOVEMENTCOST = 10;
+    private final int[] coords;
 
     private int x;
     private int y;
     private boolean walkable;
     private Node previous;
-    private int gCosts;
-    private int hCosts;
 
     public Node(int x, int y) {
         this.x = x;
         this.y = y;
+        this.coords = new int[]{x,y};
         this.walkable = true;
     }
 
-    public int getfCosts() {
-        return gCosts + hCosts;
-    }
-
-    public void setgCosts(Node previousNode, int basicCost) {
-        setgCosts(previousNode.getgCosts() + basicCost);
-    }
-
-    public void setgCosts(Node previousNode) {
-        setgCosts(previousNode, BASICMOVEMENTCOST);
-    }
-
-    public int calculategCosts(Node previousNode) {
-        return (previousNode.getgCosts()
-                + BASICMOVEMENTCOST);
+    public int[] getCoords() {
+        return coords;
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Node other = (Node) obj;
-        if (this.x != other.x) {
-            return false;
-        }
-        if (this.y != other.y) {
-            return false;
-        }
-        return true;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Node node = (Node) o;
+
+        if (x != node.x) return false;
+        return y == node.y;
+
     }
 
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 17 * hash + this.x;
-        hash = 17 * hash + this.y;
-        return hash;
+        int result = x;
+        result = 31 * result + y;
+        return result;
     }
-
 
     public int getX() {
         return x;
@@ -85,25 +63,9 @@ public class Node {
         this.previous = previous;
     }
 
-    public int getgCosts() {
-        return gCosts;
-    }
-
-    public void setgCosts(int gCosts) {
-        this.gCosts = gCosts;
-    }
-
-    public void sethCosts(int hCosts) {
-        this.hCosts = hCosts;
-    }
-
-    public void sethCosts(Node endNode) {
-        this.sethCosts((absolute(this.getX() - endNode.getX())
-                + absolute(this.getY() - endNode.getY()))
-                * BASICMOVEMENTCOST);
-    }
-
-    private int absolute(int a) {
-        return a > 0 ? a : -a;
+    @Override
+    public int compareTo(Node o) {
+        if (this.getX()-o.getX()!=0) return this.getX()-o.getX();
+        else return this.getY()-o.getY();
     }
 }

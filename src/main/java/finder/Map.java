@@ -3,14 +3,15 @@ package finder;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.TreeSet;
 
 public class Map {
 
     private int width;
     private int height;
     private Node[][] nodes;
-    private List<Node> openList;
-    private List<Node> closedList;
+    private TreeSet<Node> openList;
+    private TreeSet<Node> closedList;
     private boolean done = false;
     private Node start;
     private Node finish;
@@ -36,7 +37,11 @@ public class Map {
     }
 
     public final Node getNode(int x, int y) {
-        return nodes[x][y];
+        try {
+            return nodes[x][y];
+        } catch (ArrayIndexOutOfBoundsException e) {
+            return null;
+        }
     }
 
     public void drawMap() {
@@ -57,36 +62,23 @@ public class Map {
     }
 
     public final List<Node> findPath() {
-        openList = new ArrayList<>();
-        closedList = new ArrayList<>();
+        long s = System.currentTimeMillis();
+        openList = new TreeSet<>();
+        closedList = new TreeSet<>();
         openList.add(start);
 
         done = false;
         Node current;
         while (!done) {
-            current = lowestFInOpen();
+            current = openList.last();
             closedList.add(current);
             openList.remove(current);
 
             if (current.equals(finish)) {
+                System.out.println(System.currentTimeMillis() - s + "FIND");
                 return calcPath(start, current);
             }
-
-            List<Node> surroundNodes = getSurroundNodes(current);
-            for (Node surround : surroundNodes) {
-                if (!openList.contains(surround)) { // node is not in openList
-                    surround.setPrevious(current); // set current node as previous for this node
-                    surround.sethCosts(finish); // set h costs of this node (estimated costs to goal)
-                    surround.setgCosts(current); // set g costs of this node (costs from start to this node)
-                    openList.add(surround); // add node to openList
-                } else {
-                    if (surround.getgCosts() > surround.calculategCosts(current)) { // costs from current node are cheaper than previous costs
-                        surround.setPrevious(current); // set current node as previous for this node
-                        surround.setgCosts(current); // set g costs of this node (costs from start to this node)
-                    }
-                }
-            }
-
+            getSurroundNodes(current);
             if (openList.isEmpty()) {
                 return new ArrayList<>();
             }
@@ -95,6 +87,7 @@ public class Map {
     }
 
     private List<Node> calcPath(Node start, Node goal) {
+        long s = System.currentTimeMillis();
         LinkedList<Node> path = new LinkedList<>();
 
         Node curr = goal;
@@ -107,81 +100,63 @@ public class Map {
                 done = true;
             }
         }
+        System.out.println(System.currentTimeMillis() - s + "PATH");
         return path;
     }
 
-    private Node lowestFInOpen() {
-        Node cheapest = openList.get(0);
-        for (Node anOpenList : openList) {
-            if (anOpenList.getfCosts() < cheapest.getfCosts()) {
-                cheapest = anOpenList;
-            }
-        }
-        return cheapest;
-    }
 
-    private List<Node> getSurroundNodes(Node node) {
+    private void getSurroundNodes(Node node) {
         int x = node.getX();
         int y = node.getY();
-        List<Node> nodes = new ArrayList<>(8);
 
         Node temp;
-        if (x + 1 < width & y - 2 >= 0) {
-            temp = this.getNode((x + 1), (y - 2));
-            if (temp.isWalkable() && !closedList.contains(temp)) {
-                nodes.add(temp);
-            }
+        temp = this.getNode((x + 1), (y - 2));
+        if (temp != null && temp.isWalkable() && !closedList.contains(temp)) {
+            openList.add(temp);
+            temp.setPrevious(node);
         }
 
-        if (x + 2 < width & y - 1 >= 0) {
-            temp = this.getNode((x + 2), (y - 1));
-            if (temp.isWalkable() && !closedList.contains(temp)) {
-                nodes.add(temp);
-            }
+        temp = this.getNode((x + 2), (y - 1));
+        if (temp != null && temp.isWalkable() && !closedList.contains(temp)) {
+            openList.add(temp);
+            temp.setPrevious(node);
         }
 
-        if (x + 1 < width & y + 2 < height) {
-            temp = this.getNode((x + 1), (y + 2));
-            if (temp.isWalkable() && !closedList.contains(temp)) {
-                nodes.add(temp);
-            }
+        temp = this.getNode((x + 1), (y + 2));
+        if (temp != null && temp.isWalkable() && !closedList.contains(temp)) {
+            openList.add(temp);
+            temp.setPrevious(node);
         }
 
-        if (x + 2 < width & y + 1 < height) {
-            temp = this.getNode((x + 2), (y + 1));
-            if (temp.isWalkable() && !closedList.contains(temp)) {
-                nodes.add(temp);
-            }
+        temp = this.getNode((x + 2), (y + 1));
+        if (temp != null && temp.isWalkable() && !closedList.contains(temp)) {
+            openList.add(temp);
+            temp.setPrevious(node);
         }
 
-        if (x - 1 >= 0 & y - 2 >= 0) {
-            temp = this.getNode((x - 1), (y - 2));
-            if (temp.isWalkable() && !closedList.contains(temp)) {
-                nodes.add(temp);
-            }
+        temp = this.getNode((x - 1), (y - 2));
+        if (temp != null && temp.isWalkable() && !closedList.contains(temp)) {
+            openList.add(temp);
+            temp.setPrevious(node);
         }
 
-        if (x - 2 >= 0 & y - 1 >= 0) {
-            temp = this.getNode((x - 2), (y - 1));
-            if (temp.isWalkable() && !closedList.contains(temp)) {
-                nodes.add(temp);
-            }
+        temp = this.getNode((x - 2), (y - 1));
+        if (temp != null && temp.isWalkable() && !closedList.contains(temp)) {
+            openList.add(temp);
+            temp.setPrevious(node);
         }
 
-        if (x - 1 >= 0 & y + 2 < height) {
-            temp = this.getNode((x - 1), (y + 2));
-            if (temp.isWalkable() && !closedList.contains(temp)) {
-                nodes.add(temp);
-            }
+        temp = this.getNode((x - 1), (y + 2));
+        if (temp != null && temp.isWalkable() && !closedList.contains(temp)) {
+            openList.add(temp);
+            temp.setPrevious(node);
         }
 
-        if (x - 2 >= 0 & y + 1 < height) {
-            temp = this.getNode((x - 2), (y + 1));
-            if (temp.isWalkable() && !closedList.contains(temp)) {
-                nodes.add(temp);
-            }
+        temp = this.getNode((x - 2), (y + 1));
+        if (temp != null && temp.isWalkable() && !closedList.contains(temp)) {
+            openList.add(temp);
+            temp.setPrevious(node);
         }
-        return nodes;
     }
 
 }
