@@ -36,6 +36,7 @@ public class MapTest {
 
     @Test
     public void findPathFromParsedTable() throws Exception {
+//        init();
         List<Node> path = map.findPath();
 
         for (Node aPath : path) {
@@ -49,8 +50,8 @@ public class MapTest {
     @Test
     public void findPathSimple() throws Exception {
         int[][] matrix = new int[][]{
-                {-2, -1, 0, 0, 0},
-                {0, -1, -1, -1, -3},
+                {-2, -1, -1, 0, 0},
+                {0, -1, 0, -1, -3},
                 {0, 0, 0, -1, 0},
         };
         Map map = new Map(matrix);

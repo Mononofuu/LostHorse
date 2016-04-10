@@ -1,5 +1,6 @@
 package finder;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -56,31 +57,29 @@ public class Map {
     }
 
     public final List<Node> findPath() {
-        openList = new LinkedList<>();
-        closedList = new LinkedList<>();
+        openList = new ArrayList<>();
+        closedList = new ArrayList<>();
         openList.add(start);
 
         done = false;
         Node current;
         while (!done) {
-            current = lowestFInOpen(); // get node with lowest fCosts from openList
-            closedList.add(current); // add current node to closed list
-            openList.remove(current); // delete current node from open list
+            current = lowestFInOpen();
+            closedList.add(current);
+            openList.remove(current);
 
-            if (current.equals(finish)) { // found goal
+            if (current.equals(finish)) {
                 return calcPath(start, current);
             }
 
-            // for all adjacent nodes:
             List<Node> surroundNodes = getSurroundNodes(current);
-            for (int i = 0; i < surroundNodes.size(); i++) {
-                Node surround = surroundNodes.get(i);
+            for (Node surround : surroundNodes) {
                 if (!openList.contains(surround)) { // node is not in openList
                     surround.setPrevious(current); // set current node as previous for this node
                     surround.sethCosts(finish); // set h costs of this node (estimated costs to goal)
                     surround.setgCosts(current); // set g costs of this node (costs from start to this node)
                     openList.add(surround); // add node to openList
-                } else { // node is in openList
+                } else {
                     if (surround.getgCosts() > surround.calculategCosts(current)) { // costs from current node are cheaper than previous costs
                         surround.setPrevious(current); // set current node as previous for this node
                         surround.setgCosts(current); // set g costs of this node (costs from start to this node)
@@ -88,21 +87,13 @@ public class Map {
                 }
             }
 
-            if (openList.isEmpty()) { // no path exists
-                return new LinkedList<Node>(); // return empty list
+            if (openList.isEmpty()) {
+                return new ArrayList<>();
             }
         }
-        return null; // unreachable
+        return null;
     }
 
-    /**
-     * calculates the found path between two points according to
-     * their given <code>previousNode</code> field.
-     *
-     * @param start
-     * @param goal
-     * @return
-     */
     private List<Node> calcPath(Node start, Node goal) {
         LinkedList<Node> path = new LinkedList<>();
 
@@ -110,7 +101,7 @@ public class Map {
         boolean done = false;
         while (!done) {
             path.addFirst(curr);
-            curr = (Node) curr.getPrevious();
+            curr = curr.getPrevious();
 
             if (curr.equals(start)) {
                 done = true;
@@ -122,19 +113,18 @@ public class Map {
     private Node lowestFInOpen() {
         // TODO currently, this is done by going through the whole openList!
         Node cheapest = openList.get(0);
-        for (int i = 0; i < openList.size(); i++) {
-            if (openList.get(i).getfCosts() < cheapest.getfCosts()) {
-                cheapest = openList.get(i);
+        for (Node anOpenList : openList) {
+            if (anOpenList.getfCosts() < cheapest.getfCosts()) {
+                cheapest = anOpenList;
             }
         }
         return cheapest;
     }
 
     private List<Node> getSurroundNodes(Node node) {
-        // TODO make loop
         int x = node.getX();
         int y = node.getY();
-        List<Node> nodes = new LinkedList<>();
+        List<Node> nodes = new ArrayList<>(8);
 
         Node temp;
         if (x + 1 < width & y - 2 >= 0) {
