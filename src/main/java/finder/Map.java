@@ -111,7 +111,6 @@ public class Map {
     }
 
     private Node lowestFInOpen() {
-        // TODO currently, this is done by going through the whole openList!
         Node cheapest = openList.get(0);
         for (Node anOpenList : openList) {
             if (anOpenList.getfCosts() < cheapest.getfCosts()) {
