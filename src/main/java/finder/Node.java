@@ -2,7 +2,7 @@ package finder;
 
 public class Node implements Comparable<Node> {
 
-    private final static int BASICMOVEMENTCOST = 10;
+    private final static int BASIC_MOVEMENT_COST = 10;
 
     private int x;
     private int y;
@@ -24,14 +24,12 @@ public class Node implements Comparable<Node> {
     }
 
     public void setgCosts(Node previousNode) {
-        setgCosts(previousNode, BASICMOVEMENTCOST);
+        setgCosts(previousNode, BASIC_MOVEMENT_COST);
     }
 
     public int calculategCosts(Node previousNode) {
-        return (previousNode.getgCosts()
-                + BASICMOVEMENTCOST);
+        return (previousNode.getgCosts() + BASIC_MOVEMENT_COST);
     }
-
 
     @Override
     public boolean equals(Object o) {
@@ -87,9 +85,9 @@ public class Node implements Comparable<Node> {
 
     @Override
     public int compareTo(Node o) {
-//        if (this.getfCosts() - o.getfCosts() != 0) {
-//            return this.getfCosts() - o.getfCosts();
-//        }
+        if (this.getfCosts() - o.getfCosts() != 0) {
+            return this.getfCosts() - o.getfCosts();
+        }
         if (this.getX() - o.getX() != 0) {
             return this.getX() - o.getX();
         } else return this.getY() - o.getY();

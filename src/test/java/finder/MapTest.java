@@ -15,6 +15,7 @@ import java.util.concurrent.TimeUnit;
 
 public class MapTest {
     private static final Logger LOG = LoggerFactory.getLogger(MapTest.class);
+    private static Map map;
     @Rule
     public Stopwatch stopwatch = new Stopwatch() {
         private void logInfo(Description description, long nanos) {
@@ -27,7 +28,6 @@ public class MapTest {
             logInfo(description, nanos);
         }
     };
-    private static Map map;
 
     @BeforeClass
     public static void init() throws IOException {

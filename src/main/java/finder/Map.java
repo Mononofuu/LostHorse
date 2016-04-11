@@ -1,6 +1,9 @@
 package finder;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.TreeSet;
 
 public class Map {
 
@@ -10,7 +13,6 @@ public class Map {
     private Node finish;
 
     public Map(int[][] matrix) {
-        long s = System.currentTimeMillis();
         int width = matrix[0].length;
         int height = matrix.length;
         nodes = new Node[width][height];
@@ -29,12 +31,11 @@ public class Map {
         }
     }
 
-    public final Node getNode(int x, int y) {
-        try {
-            return nodes[x][y];
-        } catch (ArrayIndexOutOfBoundsException e) {
+    private Node getNode(int x, int y) {
+        if (x < 0 || y < 0 || x >= nodes.length || y >= nodes[0].length) {
             return null;
         }
+        return nodes[x][y];
     }
 
     public final List<Node> findPath() {
@@ -67,16 +68,9 @@ public class Map {
 
     private List<Node> calcPath(Node start, Node goal) {
         LinkedList<Node> path = new LinkedList<>();
-
-        Node curr = goal;
-        boolean done = false;
-        while (!done) {
-            path.addFirst(curr);
-            curr = curr.getPrevious();
-
-            if (curr.equals(start)) {
-                done = true;
-            }
+        while (!goal.equals(start)) {
+            path.addFirst(goal);
+            goal = goal.getPrevious();
         }
         return path;
     }
@@ -85,42 +79,42 @@ public class Map {
         List<Node> nodes = new LinkedList<>();
 
         Node temp = this.getNode((node.getX() + 1), (node.getY() - 2));
-        if (temp!=null && !closedList.contains(temp)) {
+        if (temp != null && !closedList.contains(temp)) {
             nodes.add(temp);
         }
 
         temp = this.getNode((node.getX() + 2), (node.getY() - 1));
-        if (temp!=null && !closedList.contains(temp)) {
+        if (temp != null && !closedList.contains(temp)) {
             nodes.add(temp);
         }
 
         temp = this.getNode((node.getX() + 1), (node.getY() + 2));
-        if (temp!=null && !closedList.contains(temp)) {
+        if (temp != null && !closedList.contains(temp)) {
             nodes.add(temp);
         }
 
         temp = this.getNode((node.getX() + 2), (node.getY() + 1));
-        if (temp!=null && !closedList.contains(temp)) {
+        if (temp != null && !closedList.contains(temp)) {
             nodes.add(temp);
         }
 
         temp = this.getNode((node.getX() - 1), (node.getY() - 2));
-        if (temp!=null && !closedList.contains(temp)) {
+        if (temp != null && !closedList.contains(temp)) {
             nodes.add(temp);
         }
 
         temp = this.getNode((node.getX() - 2), (node.getY() - 1));
-        if (temp!=null && !closedList.contains(temp)) {
+        if (temp != null && !closedList.contains(temp)) {
             nodes.add(temp);
         }
 
         temp = this.getNode((node.getX() - 1), (node.getY() + 2));
-        if (temp!=null && !closedList.contains(temp)) {
+        if (temp != null && !closedList.contains(temp)) {
             nodes.add(temp);
         }
 
         temp = this.getNode((node.getX() - 2), (node.getY() + 1));
-        if (temp!=null && !closedList.contains(temp)) {
+        if (temp != null && !closedList.contains(temp)) {
             nodes.add(temp);
         }
         return nodes;
