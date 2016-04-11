@@ -12,7 +12,7 @@ import java.util.Iterator;
 
 public class Parser {
     public static int[][] parse() throws IOException {
-        int matrix[][] = new int[0][0];
+        int matrix[][] = new int[0][];
 
         String fileName = "c:\\Temp\\horse.xlsx";
         try (InputStream inputStream = new FileInputStream(fileName);

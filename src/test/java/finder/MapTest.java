@@ -55,7 +55,6 @@ public class MapTest {
                 {0, 0, 0, -1, 0},
         };
         Map map = new Map(matrix);
-        map.drawMap();
         List<Node> path = map.findPath();
 
         for (Node aPath : path) {

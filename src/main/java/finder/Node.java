@@ -1,12 +1,11 @@
 package finder;
 
-public class Node {
+public class Node implements Comparable<Node> {
 
     private final static int BASICMOVEMENTCOST = 10;
 
     private int x;
     private int y;
-    private boolean walkable;
     private Node previous;
     private int gCosts;
     private int hCosts;
@@ -14,7 +13,6 @@ public class Node {
     public Node(int x, int y) {
         this.x = x;
         this.y = y;
-        this.walkable = true;
     }
 
     public int getfCosts() {
@@ -34,32 +32,25 @@ public class Node {
                 + BASICMOVEMENTCOST);
     }
 
+
     @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Node other = (Node) obj;
-        if (this.x != other.x) {
-            return false;
-        }
-        if (this.y != other.y) {
-            return false;
-        }
-        return true;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Node node = (Node) o;
+
+        if (x != node.x) return false;
+        return y == node.y;
+
     }
 
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 17 * hash + this.x;
-        hash = 17 * hash + this.y;
-        return hash;
+        int result = x;
+        result = 31 * result + y;
+        return result;
     }
-
 
     public int getX() {
         return x;
@@ -67,14 +58,6 @@ public class Node {
 
     public int getY() {
         return y;
-    }
-
-    public boolean isWalkable() {
-        return walkable;
-    }
-
-    public void setWalkable(boolean walkable) {
-        this.walkable = walkable;
     }
 
     public Node getPrevious() {
@@ -98,12 +81,17 @@ public class Node {
     }
 
     public void sethCosts(Node endNode) {
-        this.sethCosts((absolute(this.getX() - endNode.getX())
-                + absolute(this.getY() - endNode.getY()))
-                * BASICMOVEMENTCOST);
+        this.sethCosts((this.getX() - endNode.getX())
+                + (this.getY() - endNode.getY()));
     }
 
-    private int absolute(int a) {
-        return a > 0 ? a : -a;
+    @Override
+    public int compareTo(Node o) {
+//        if (this.getfCosts() - o.getfCosts() != 0) {
+//            return this.getfCosts() - o.getfCosts();
+//        }
+        if (this.getX() - o.getX() != 0) {
+            return this.getX() - o.getX();
+        } else return this.getY() - o.getY();
     }
 }
